@@ -1,6 +1,6 @@
 # Crayons Pizza
 
-Online ordering for a pizza shop in Davie, Florida. Two products: **One Friday**, a cheese slice for $6.00 picked up on a Friday you choose, and **Every Friday**, a subscription that puts a cheese slice aside every Friday for $24.00 every four weeks. Customers pick their Friday on a calendar (only Fridays can be chosen, up to eight weeks ahead), enter their own name plus the student's name, grade and teacher or room (all required), pay on a hosted checkout page, and get a confirmation. Built with Next.js so it deploys to Vercel as is.
+Online ordering for a pizza shop in Davie, Florida. Two products: **One Friday**, a cheese slice for $6.00 delivered to the classroom on a Friday you choose, and **Every Friday**, a subscription that puts a cheese slice aside every Friday for $24.00 every four weeks. Customers pick their Friday on a calendar (only Fridays can be chosen, up to eight weeks ahead), enter their own name plus the student's name, grade and teacher or room (all required), pay on a hosted checkout page, and get a confirmation. Slices are hand delivered to the student's classroom on Friday; there is no parent pickup. Built with Next.js so it deploys to Vercel as is.
 
 Payments go through a small provider interface. **Stripe Checkout is implemented** (payment mode for one-off orders, subscription mode when the cart has a subscription, with any one-off slices charged once on the same checkout), a **mock provider** lets you run the whole flow with no keys, and a **Chase stub** marks where that integration goes.
 
@@ -34,7 +34,7 @@ See `.env.example` for every variable.
 
 | Path | What it does |
 | --- | --- |
-| `lib/menu.ts` | The two products, prices, billing interval, store details, Friday pickup window. Prices here are the only prices used; the server never trusts amounts from the browser. |
+| `lib/menu.ts` | The two products, prices, billing interval, store details, delivery note. Prices here are the only prices used; the server never trusts amounts from the browser. |
 | `lib/cart.ts` | Cart math and validation, shared by the browser and the API. |
 | `lib/fridays.ts` | Date helpers: which Fridays can be chosen, time-zone-safe "today", formatting. |
 | `lib/schoolCalendar.ts` | The school's 2026-27 closures and the Pizza Friday rule: no school on a Friday means slices go out the Thursday before; a full-week break means no pizza that week and the Friday cannot be chosen. Edit `CLOSURES` and `DAY_NOTES` when the school changes dates. |
@@ -48,7 +48,7 @@ See `.env.example` for every variable.
 | `app/api/webhooks/stripe/route.ts` | Stripe webhook receiver. Verifies the signature, records paid orders. |
 | `app/order/success` | Confirmation page. Reads the session id the provider sends back. |
 | `app/checkout/mock` | The pretend payment page used by the mock provider only. |
-| `components/` | Cart state (localStorage), header, menu, Friday calendar picker, cart drawer with the pickup form. |
+| `components/` | Cart state (localStorage), header, menu, Friday calendar picker, cart drawer with the delivery details form. |
 
 ## Adding Chase, Square, or another provider
 

@@ -69,8 +69,8 @@ export const STORE = {
   city: "Davie, Florida 33325",
   phone: "(954) 452-1616",
   timeZone: "America/New_York",
-  /** Online orders are picked up on Fridays during these hours. */
-  fridayPickup: { open: "9:00 AM", close: "5:00 PM" },
+  /** Slices are hand delivered to each student's classroom on Friday. No pickup. */
+  delivery: "Hand delivered to the student's classroom on Friday.",
   hours: [{ days: "Monday to Friday", open: "9:00 AM", close: "5:00 PM" }],
   /** How far ahead a Friday can be chosen. */
   maxWeeksAhead: 8,

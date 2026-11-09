@@ -99,7 +99,7 @@ export function FridayPicker({ value, onChange, id = "friday-picker", describedB
               className={`cal-day cal-friday ${moved ? "cal-moved" : ""} ${value === d ? "selected" : ""}`}
               aria-pressed={value === d}
               aria-label={moved ? `${formatFriday(d)}, no school, slices served ${formatFriday(status.serveOn)}` : formatFriday(d)}
-              title={moved ? `No school this Friday. Pick up Thursday, ${shortDay(status.serveOn)}.` : undefined}
+              title={moved ? `No school this Friday. Delivered Thursday, ${shortDay(status.serveOn)}.` : undefined}
               onClick={() => onChange(d)}
             >
               {Number(d.slice(8))}
@@ -109,7 +109,7 @@ export function FridayPicker({ value, onChange, id = "friday-picker", describedB
       </div>
       <p className="cal-foot">
         {selected && selected.kind === "moved"
-          ? `${formatFriday(value as ISODate)}: no school. Pick up Thursday, ${shortDay(selected.serveOn)}${selected.note ? ` (${selected.note.toLowerCase()})` : ""}.`
+          ? `${formatFriday(value as ISODate)}: no school. Delivered Thursday, ${shortDay(selected.serveOn)}${selected.note ? ` (${selected.note.toLowerCase()})` : ""}.`
           : value
             ? formatFriday(value)
             : "Fridays only. Tap one."}
@@ -117,7 +117,7 @@ export function FridayPicker({ value, onChange, id = "friday-picker", describedB
       {hasSkipped || hasMoved ? (
         <p className="cal-legend">
           {hasSkipped ? <span className="cal-legend-skipped">Crossed out: school break, no pizza that week.</span> : null}
-          {hasMoved ? <span className="cal-legend-moved">Thu: no school Friday, slices served Thursday.</span> : null}
+          {hasMoved ? <span className="cal-legend-moved">Thu: no school Friday, slices delivered Thursday.</span> : null}
         </p>
       ) : null}
     </div>

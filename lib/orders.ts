@@ -5,7 +5,7 @@ import type { PaidOrder } from "./payments/types.ts";
  * confirm the webhook fires. Swap the body of `recordPaidOrder` for a database
  * insert (Vercel Postgres, Supabase, PlanetScale, ...) and a notification to the
  * kitchen (email, SMS, printer) when you are ready. For subscriptions, the
- * kitchen needs the pickup date and then every Friday after it.
+ * kitchen needs the delivery date and then every Friday after it.
  */
 export async function recordPaidOrder(order: PaidOrder): Promise<void> {
   console.log(

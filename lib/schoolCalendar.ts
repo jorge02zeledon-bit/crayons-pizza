@@ -1,7 +1,7 @@
 /**
  * Crayons Christian School calendar, 2026-27, as it affects Pizza Friday.
  *
- * Rule: if there is no school on a Friday, slices are served the Thursday
+ * Rule: if there is no school on a Friday, slices are delivered the Thursday
  * before, as long as that Thursday is a school day. If the Thursday is also
  * off (a long break), there is no pizza day that week. Outside the school
  * year there are no pizza days.
@@ -78,7 +78,7 @@ export function fridayStatus(friday: ISODate): FridayStatus {
   return { kind: "skipped", reason: closure.label };
 }
 
-/** The day slices are actually handed out for a chosen Friday, or null when there is no pizza day that week. */
+/** The day slices are actually delivered for a chosen Friday, or null when there is no pizza day that week. */
 export function serveDateFor(friday: ISODate): ISODate | null {
   const s = fridayStatus(friday);
   if (s.kind === "school") return friday;

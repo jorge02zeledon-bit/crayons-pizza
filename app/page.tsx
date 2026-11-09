@@ -22,12 +22,12 @@ export default function HomePage() {
             <span>Fridays.</span>
           </h1>
           <p className="hero-sub">
-            A cheese slice, {price} a Friday, or {subPrice} a month for every Friday. Pick your Friday on the calendar and it
-            is hot when you walk in at {STORE.address} in Davie.
+            A cheese slice, {price} a Friday, or {subPrice} a month for every Friday. Pick your Friday on the calendar and we hand deliver
+            the slice to your student&apos;s classroom. Nothing to pick up.
           </p>
           <div className="hero-cta">
             <OrderButton />
-            <a className="link-under" href="#pickup">How pickup works</a>
+            <a className="link-under" href="#how">How it works</a>
           </div>
         </div>
         <div className="hero-art" aria-hidden="true">
@@ -38,14 +38,14 @@ export default function HomePage() {
       <div className="band" role="presentation">
         <span>One Friday, {price}.</span>
         <span>Every Friday, {subPrice} a month.</span>
-        <span>Fridays {STORE.fridayPickup.open} to {STORE.fridayPickup.close}.</span>
+        <span>Delivered to the classroom.</span>
       </div>
 
       <MenuSection />
 
-      <section className="pickup" id="pickup" aria-labelledby="pickup-h">
+      <section className="pickup" id="how" aria-labelledby="how-h">
         <div className="wrap">
-          <h2 id="pickup-h" className="h2">Pickup, start to finish</h2>
+          <h2 id="how-h" className="h2">How it works</h2>
           <ol className="steps">
             <li>
               <strong>Choose one Friday or every Friday.</strong>
@@ -54,15 +54,15 @@ export default function HomePage() {
             <li>
               <strong>Pick the Friday on the calendar.</strong>
               <span>
-                For a subscription that is your first Friday. Up to {STORE.maxWeeksAhead} weeks ahead. No school on a Friday? We serve the
+                For a subscription that is your first Friday. Up to {STORE.maxWeeksAhead} weeks ahead. No school on a Friday? We deliver the
                 Thursday before. School break all week? No pizza day, and the calendar shows it.
               </span>
             </li>
             <li>
-              <strong>Pay online, then give the student&apos;s name at the counter.</strong>
+              <strong>Pay online. We bring the slice to the student.</strong>
               <span>
-                Card, Apple Pay or Google Pay on a secure page. Your slice is ready on Friday between {STORE.fridayPickup.open} and{" "}
-                {STORE.fridayPickup.close}.
+                Card, Apple Pay or Google Pay on a secure page. On Friday the slice is hand delivered to the grade and teacher or room you
+                entered. No pickup, nothing for parents to do.
               </span>
             </li>
           </ol>
@@ -74,7 +74,7 @@ export default function HomePage() {
           <h2 id="cal-h" className="h2">Pizza Fridays and the school calendar</h2>
           <p className="cal-rule">
             Every Friday from {formatFriday(firstFriday, "short")} to {formatFriday(SCHOOL_YEAR.lastDay, "short")} is a pizza Friday, except the
-            ones below. When there is no school on a Friday, slices are served the Thursday before. When the whole week is a break, there is
+            ones below. When there is no school on a Friday, slices are delivered the Thursday before. When the whole week is a break, there is
             no pizza that week and you cannot pick that Friday. Dates follow the school&apos;s {SCHOOL_YEAR.label} calendar and move if the school moves them.
           </p>
           <table className="cal-table">
@@ -135,10 +135,7 @@ export default function HomePage() {
               </tbody>
             </table>
             <p className="hours-note">
-              Online orders are picked up on Fridays,{" "}
-              <span className="nowrap">
-                {STORE.fridayPickup.open} to {STORE.fridayPickup.close}.
-              </span>
+              Online orders are not picked up here. {STORE.delivery}
             </p>
           </div>
         </div>

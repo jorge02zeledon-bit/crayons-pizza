@@ -19,7 +19,7 @@ export type CheckoutRequest = {
     email?: string;
     phone: string;
   };
-  /** YYYY-MM-DD. Pickup Friday for one-off lines, first Friday for subscriptions. */
+  /** YYYY-MM-DD. Delivery Friday for one-off lines, first Friday for subscriptions. */
   pickupDate: string;
   note?: string;
   /** Absolute URLs the provider sends the customer back to. */

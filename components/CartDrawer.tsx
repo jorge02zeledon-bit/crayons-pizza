@@ -98,7 +98,7 @@ export function CartDrawer() {
     }
   }
 
-  const dateLabel = subscribing && oneOff ? "Your first Friday" : subscribing ? "Start on which Friday?" : "Pick up on which Friday?";
+  const dateLabel = subscribing && oneOff ? "Your first Friday" : subscribing ? "Start on which Friday?" : "Which Friday?";
   const payLabel = subscribing
     ? `Pay ${formatMoney(totals.totalCents)} today`
     : `Pay ${formatMoney(totals.totalCents)}`;
@@ -109,7 +109,7 @@ export function CartDrawer() {
       <div className="drawer" id="cart-drawer" role="dialog" aria-modal="true" aria-labelledby="drawer-title" ref={panel}>
         <div className="drawer-head">
           <h2 id="drawer-title" className="h3">
-            {step === "details" ? "Pickup details" : "Your order"}
+            {step === "details" ? "Delivery details" : "Your order"}
           </h2>
           <button type="button" className="icon-btn" aria-label="Close cart" onClick={close} ref={closeBtn}>
             ×
@@ -195,7 +195,7 @@ export function CartDrawer() {
                     {errors.pickupDate ? <p className="err" id="err-pickupDate">{errors.pickupDate}</p> : null}
                     {pickupDate && pickupStatus?.kind === "moved" ? (
                       <p className="hint hint-strong">
-                        No school {formatFriday(pickupDate, "short")}. Pick up Thursday, {formatFriday(pickupStatus.serveOn, "short").replace(/^\w{3}, /, "")}
+                        No school {formatFriday(pickupDate, "short")}. Delivered Thursday, {formatFriday(pickupStatus.serveOn, "short").replace(/^\w{3}, /, "")}
                         {pickupStatus.note ? ` (${pickupStatus.note.toLowerCase()})` : ""}.
                       </p>
                     ) : null}

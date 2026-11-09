@@ -105,7 +105,7 @@ export default async function OrdersPage({ searchParams }: { searchParams: Promi
       ) : (
         <>
           <p className="admin-summary">
-            {filters.friday ? `Pickup ${formatFriday(filters.friday)}${fridayStatus(filters.friday).kind === "moved" ? ` (served ${formatFriday((fridayStatus(filters.friday) as { serveOn: string }).serveOn, "short")})` : ""}: ` : `Last ${days} days: `}
+            {filters.friday ? `Delivery ${formatFriday(filters.friday)}${fridayStatus(filters.friday).kind === "moved" ? ` (delivered ${formatFriday((fridayStatus(filters.friday) as { serveOn: string }).serveOn, "short")})` : ""}: ` : `Last ${days} days: `}
             <strong>{rows.length}</strong> {rows.length === 1 ? "order" : "orders"}, <strong>{totalSlices}</strong> {totalSlices === 1 ? "slice" : "slices"}
             {byGrade.length > 1 ? ". By grade: " + byGrade.map((g) => `${g.grade || "?"} ${g.slices}`).join(", ") : ""}.
           </p>

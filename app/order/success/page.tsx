@@ -44,10 +44,10 @@ export default async function SuccessPage({ searchParams }: { searchParams: Prom
           ? sub
             ? `First slice ${movedTo ? `${movedTo} (no school that Friday)` : when}, then every school Friday after. `
             : movedTo
-              ? `No school ${when}, so pick up ${movedTo}. `
-              : `Pick up ${when}. `
+              ? `No school ${when}, so it is delivered ${movedTo}. `
+              : `Delivered ${when}. `
           : ""}
-        {STORE.fridayPickup.open} to {STORE.fridayPickup.close} at {STORE.address}. Give the student's name at the counter.
+        We bring it to the classroom during the school day. Nothing to pick up.
       </p>
       <div className="receipt">
         <div className="receipt-ref">

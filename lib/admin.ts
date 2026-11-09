@@ -54,7 +54,7 @@ export type OrderRow = {
   email: string;
   kind: "one-off" | "subscription";
   slices: number;
-  /** One-off: the pickup Friday. Subscription: the first Friday. */
+  /** One-off: the delivery Friday. Subscription: the first Friday. */
   friday: string;
   status: string;
   placedAt: string;
