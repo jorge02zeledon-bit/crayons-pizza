@@ -40,6 +40,7 @@ export const CLOSURES: readonly Closure[] = [
 /** School days worth a heads-up on the pizza calendar. Pizza is still served on these. */
 export const DAY_NOTES: Readonly<Record<ISODate, string>> = {
   "2026-10-09": "Early release",
+  // The printed calendar also marks Dec 3, 10 and 11 as Christmas Show days; the school confirmed the show is Dec 4 only.
   "2026-12-04": "Christmas Show",
   "2026-12-18": "Christmas party, early release",
   "2027-02-12": "Valentine's Day celebration, early release",
