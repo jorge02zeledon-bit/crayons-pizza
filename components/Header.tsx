@@ -13,6 +13,7 @@ export function Header() {
       <nav className="topnav" aria-label="Site">
         <Link href="/#menu">Menu</Link>
         <Link href="/#pickup">Pickup</Link>
+        <Link href="/#calendar">Calendar</Link>
         <Link href="/#hours">Hours</Link>
       </nav>
       <button

@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { cartLines, cartTotals, hasSubscription, sanitizeCart } from "@/lib/cart";
 import { isSelectableFriday, todayInZone } from "@/lib/fridays";
+import { isOrderableFriday } from "@/lib/schoolCalendar";
 import { GRADES, STORE } from "@/lib/menu";
 import { getPaymentProvider } from "@/lib/payments";
 import type { CheckoutRequest } from "@/lib/payments";
@@ -49,6 +50,7 @@ export async function POST(request: Request) {
   if (phone.replace(/\D/g, "").length < 10) errors.phone = "Enter a 10-digit phone number.";
   if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) errors.email = "That email address does not look right.";
   if (!isSelectableFriday(pickupDate, today, STORE.maxWeeksAhead)) errors.pickupDate = "Choose a Friday on the calendar.";
+  else if (!isOrderableFriday(pickupDate, today, STORE.maxWeeksAhead)) errors.pickupDate = "School is on break that Friday, so there is no pizza day. Pick another Friday.";
   if (Object.keys(errors).length) return NextResponse.json({ errors }, { status: 422 });
 
   const origin = siteOrigin(request.url);

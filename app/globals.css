@@ -15,6 +15,7 @@
 }
 
 * { box-sizing: border-box; }
+section[id], [id="menu"], [id="calendar"], [id="pickup"], [id="hours"] { scroll-margin-top: 84px; }
 html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
 body {
   margin: 0;
@@ -243,6 +244,24 @@ button.cal-day { border: 2px solid var(--red); background: var(--white); color: 
 button.cal-day:hover { background: #fde8e6; }
 button.cal-day.selected { background: var(--red); color: var(--red-ink); }
 .cal-foot { font-size: 14px; color: var(--grey-on-white); margin: 2px 0 0; }
+button.cal-day { position: relative; }
+button.cal-day.cal-skipped { border-color: #d9d9d9; background: #f4f4f4; color: #9a9a9a; text-decoration: line-through; cursor: not-allowed; font-weight: 600; }
+button.cal-day.cal-moved::after { content: "Thu"; position: absolute; bottom: -4px; left: 50%; transform: translateX(-50%); font-size: 9px; font-weight: 700; letter-spacing: .02em; background: var(--black); color: var(--white); padding: 1px 5px; border-radius: 999px; line-height: 1.2; }
+button.cal-day.cal-moved.selected::after { background: var(--white); color: var(--black); }
+.cal-legend { display: grid; gap: 2px; font-size: 12px; color: var(--grey-on-white); margin: 0; }
+.hint-strong { color: var(--black); font-weight: 600; }
+
+/* School calendar section */
+.calendar { background: var(--white); color: var(--black); padding: clamp(56px, 8vw, 110px) 0; }
+.calendar + .hours { border-top: 1px solid var(--rule-on-white); }
+.cal-rule { margin: 20px 0 28px; max-width: 64ch; color: var(--grey-on-white); font-size: 17px; }
+.cal-table { border-collapse: collapse; width: 100%; max-width: 820px; font-size: 16px; }
+.cal-table th, .cal-table td { text-align: left; padding: 12px 14px 12px 0; border-top: 1px solid var(--rule-on-white); vertical-align: top; }
+.cal-table thead th { border-top: 0; font-size: 13px; text-transform: none; color: var(--grey-on-white); font-weight: 600; padding-top: 0; }
+.cal-table tbody tr:last-child td { border-bottom: 1px solid var(--rule-on-white); }
+.cal-table .row-moved td:first-child { font-weight: 700; }
+.cal-table .row-skip td { color: var(--grey-on-white); }
+.cal-table .row-skip td:first-child { text-decoration: line-through; }
 .dish-art { position: relative; }
 .dish-badge { position: absolute; left: 50%; bottom: 8%; transform: translateX(-50%) rotate(-4deg); background: var(--red); color: var(--red-ink); font-weight: 900; font-variation-settings: "wdth" 118; text-transform: uppercase; padding: 8px 16px; font-size: 18px; letter-spacing: .02em; }
 .line-total small { font-weight: 500; font-size: 12px; color: var(--grey-on-white); display: block; }

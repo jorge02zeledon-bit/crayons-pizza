@@ -3,6 +3,7 @@ import { cookies } from "next/headers";
 import { ADMIN_COOKIE, adminConfigured, countByGrade, filterRows, sortRows, toRows, verifySession, type OrderRow } from "@/lib/admin";
 import { formatFriday, isISODate, selectableFridays, todayInZone } from "@/lib/fridays";
 import { GRADES, STORE } from "@/lib/menu";
+import { fridayStatus } from "@/lib/schoolCalendar";
 import { getPaymentProvider } from "@/lib/payments";
 
 export const metadata: Metadata = { title: "Orders", robots: { index: false, follow: false } };
@@ -72,6 +73,7 @@ export default async function OrdersPage({ searchParams }: { searchParams: Promi
             {fridays.map((f) => (
               <option key={f} value={f}>
                 {formatFriday(f, "short")}
+                {fridayStatus(f).kind === "moved" ? " (no school, served Thu)" : fridayStatus(f).kind === "skipped" ? " (break, no pizza)" : ""}
               </option>
             ))}
           </select>
@@ -103,7 +105,7 @@ export default async function OrdersPage({ searchParams }: { searchParams: Promi
       ) : (
         <>
           <p className="admin-summary">
-            {filters.friday ? `Pickup ${formatFriday(filters.friday)}: ` : `Last ${days} days: `}
+            {filters.friday ? `Pickup ${formatFriday(filters.friday)}${fridayStatus(filters.friday).kind === "moved" ? ` (served ${formatFriday((fridayStatus(filters.friday) as { serveOn: string }).serveOn, "short")})` : ""}: ` : `Last ${days} days: `}
             <strong>{rows.length}</strong> {rows.length === 1 ? "order" : "orders"}, <strong>{totalSlices}</strong> {totalSlices === 1 ? "slice" : "slices"}
             {byGrade.length > 1 ? ". By grade: " + byGrade.map((g) => `${g.grade || "?"} ${g.slices}`).join(", ") : ""}.
           </p>

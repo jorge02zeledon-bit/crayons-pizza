@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { addDays, formatFriday, isFriday, todayInZone, type ISODate, selectableFridays } from "@/lib/fridays";
+import { fridayStatus, orderableFridays } from "@/lib/schoolCalendar";
 import { STORE } from "@/lib/menu";
 
 type Props = {
@@ -14,12 +15,15 @@ type Props = {
 
 const WEEKDAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
-/** A month calendar where only upcoming Fridays can be chosen. */
+const shortDay = (iso: ISODate) => formatFriday(iso, "short").replace(/^\w{3}, /, "");
+
+/** A month calendar where only upcoming pizza Fridays can be chosen. */
 export function FridayPicker({ value, onChange, id = "friday-picker", describedBy, invalid }: Props) {
   const today = useMemo(() => todayInZone(STORE.timeZone), []);
-  const allowed = useMemo(() => new Set(selectableFridays(today, STORE.maxWeeksAhead)), [today]);
-  const first = [...allowed][0];
-  const last = [...allowed][allowed.size - 1];
+  const onCalendar = useMemo(() => selectableFridays(today, STORE.maxWeeksAhead), [today]);
+  const orderable = useMemo(() => new Set(orderableFridays(today, STORE.maxWeeksAhead)), [today]);
+  const first = onCalendar[0];
+  const last = onCalendar[onCalendar.length - 1];
   const [view, setView] = useState(() => (value || first).slice(0, 7)); // YYYY-MM
 
   const [y, m] = view.split("-").map(Number);
@@ -40,6 +44,11 @@ export function FridayPicker({ value, onChange, id = "friday-picker", describedB
     setView(`${d.getUTCFullYear()}-${String(d.getUTCMonth() + 1).padStart(2, "0")}`);
   };
 
+  const visibleStatuses = cells.filter((d): d is ISODate => !!d && onCalendar.includes(d)).map((d) => fridayStatus(d));
+  const hasSkipped = visibleStatuses.some((s) => s.kind === "skipped");
+  const hasMoved = visibleStatuses.some((s) => s.kind === "moved");
+  const selected = value ? fridayStatus(value) : null;
+
   return (
     <div className={`cal ${invalid ? "invalid" : ""}`} id={id} role="group" aria-label="Choose a Friday" aria-describedby={describedBy}>
       <div className="cal-head">
@@ -57,28 +66,60 @@ export function FridayPicker({ value, onChange, id = "friday-picker", describedB
             {w[0]}
           </span>
         ))}
-        {cells.map((d, i) =>
-          d === null ? (
-            <span key={`e${i}`} className="cal-empty" />
-          ) : allowed.has(d) ? (
+        {cells.map((d, i) => {
+          if (d === null) return <span key={`e${i}`} className="cal-empty" />;
+          if (!onCalendar.includes(d)) {
+            return (
+              <span key={d} className={`cal-day ${isFriday(d) ? "cal-past-friday" : ""}`} aria-hidden="true">
+                {Number(d.slice(8))}
+              </span>
+            );
+          }
+          const status = fridayStatus(d);
+          if (!orderable.has(d)) {
+            const why = status.kind === "skipped" ? status.reason : "school is out";
+            return (
+              <button
+                key={d}
+                type="button"
+                className="cal-day cal-skipped"
+                disabled
+                aria-label={`${formatFriday(d)}, no pizza: ${why}`}
+                title={`No pizza: ${why}`}
+              >
+                {Number(d.slice(8))}
+              </button>
+            );
+          }
+          const moved = status.kind === "moved";
+          return (
             <button
               key={d}
               type="button"
-              className={`cal-day cal-friday ${value === d ? "selected" : ""}`}
+              className={`cal-day cal-friday ${moved ? "cal-moved" : ""} ${value === d ? "selected" : ""}`}
               aria-pressed={value === d}
-              aria-label={formatFriday(d)}
+              aria-label={moved ? `${formatFriday(d)}, no school, slices served ${formatFriday(status.serveOn)}` : formatFriday(d)}
+              title={moved ? `No school this Friday. Pick up Thursday, ${shortDay(status.serveOn)}.` : undefined}
               onClick={() => onChange(d)}
             >
               {Number(d.slice(8))}
             </button>
-          ) : (
-            <span key={d} className={`cal-day ${isFriday(d) ? "cal-past-friday" : ""}`} aria-hidden="true">
-              {Number(d.slice(8))}
-            </span>
-          ),
-        )}
+          );
+        })}
       </div>
-      <p className="cal-foot">{value ? formatFriday(value) : "Fridays only. Tap one."}</p>
+      <p className="cal-foot">
+        {selected && selected.kind === "moved"
+          ? `${formatFriday(value as ISODate)}: no school. Pick up Thursday, ${shortDay(selected.serveOn)}${selected.note ? ` (${selected.note.toLowerCase()})` : ""}.`
+          : value
+            ? formatFriday(value)
+            : "Fridays only. Tap one."}
+      </p>
+      {hasSkipped || hasMoved ? (
+        <p className="cal-legend">
+          {hasSkipped ? <span className="cal-legend-skipped">Crossed out: school break, no pizza that week.</span> : null}
+          {hasMoved ? <span className="cal-legend-moved">Thu: no school Friday, slices served Thursday.</span> : null}
+        </p>
+      ) : null}
     </div>
   );
 }

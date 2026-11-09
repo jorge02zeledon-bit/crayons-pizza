@@ -3,6 +3,7 @@ import Link from "next/link";
 import { ClearCart } from "@/components/ClearCart";
 import { formatMoney } from "@/lib/cart";
 import { formatFriday, isISODate } from "@/lib/fridays";
+import { fridayStatus } from "@/lib/schoolCalendar";
 import { STORE } from "@/lib/menu";
 import { getPaymentProvider } from "@/lib/payments";
 
@@ -27,6 +28,8 @@ export default async function SuccessPage({ searchParams }: { searchParams: Prom
   const sub = order.mode === "subscription";
   const ref = order.sessionId.slice(-6).toUpperCase();
   const when = order.pickupDate && isISODate(order.pickupDate) ? formatFriday(order.pickupDate) : null;
+  const status = order.pickupDate && isISODate(order.pickupDate) ? fridayStatus(order.pickupDate) : null;
+  const movedTo = status?.kind === "moved" ? formatFriday(status.serveOn) : null;
   return (
     <main className="page narrow">
       <ClearCart />
@@ -37,7 +40,13 @@ export default async function SuccessPage({ searchParams }: { searchParams: Prom
       <p>
         {order.customer.name ? `Thanks, ${order.customer.name}. ` : ""}
         {order.customer.student ? `The slice is set aside for ${order.customer.student}${order.customer.grade ? `, ${order.customer.grade} grade` : ""}${order.customer.classroom ? `, ${order.customer.classroom}` : ""}. ` : ""}
-        {when ? (sub ? `First slice ${when}, then every Friday after. ` : `Pick up ${when}. `) : ""}
+        {when
+          ? sub
+            ? `First slice ${movedTo ? `${movedTo} (no school that Friday)` : when}, then every school Friday after. `
+            : movedTo
+              ? `No school ${when}, so pick up ${movedTo}. `
+              : `Pick up ${when}. `
+          : ""}
         {STORE.fridayPickup.open} to {STORE.fridayPickup.close} at {STORE.address}. Give the student's name at the counter.
       </p>
       <div className="receipt">

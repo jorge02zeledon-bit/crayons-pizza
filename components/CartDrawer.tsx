@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { formatMoney } from "@/lib/cart";
 import { formatFriday, type ISODate } from "@/lib/fridays";
+import { fridayStatus } from "@/lib/schoolCalendar";
 import { GRADES } from "@/lib/menu";
 import { useCart } from "./CartProvider";
 import { FridayPicker } from "./FridayPicker";
@@ -16,6 +17,7 @@ export function CartDrawer() {
   const [step, setStep] = useState<Step>("cart");
   const [form, setForm] = useState({ name: "", student: "", grade: "", classroom: "", phone: "", email: "", note: "" });
   const [pickupDate, setPickupDate] = useState<ISODate | "">("");
+  const pickupStatus = pickupDate ? fridayStatus(pickupDate) : null;
   const [errors, setErrors] = useState<Errors>({});
   const [busy, setBusy] = useState(false);
   const panel = useRef<HTMLDivElement>(null);
@@ -191,8 +193,14 @@ export function CartDrawer() {
                       invalid={!!errors.pickupDate}
                     />
                     {errors.pickupDate ? <p className="err" id="err-pickupDate">{errors.pickupDate}</p> : null}
+                    {pickupDate && pickupStatus?.kind === "moved" ? (
+                      <p className="hint hint-strong">
+                        No school {formatFriday(pickupDate, "short")}. Pick up Thursday, {formatFriday(pickupStatus.serveOn, "short").replace(/^\w{3}, /, "")}
+                        {pickupStatus.note ? ` (${pickupStatus.note.toLowerCase()})` : ""}.
+                      </p>
+                    ) : null}
                     {subscribing && pickupDate ? (
-                      <p className="hint">First slice {formatFriday(pickupDate, "short")}, then every Friday after.</p>
+                      <p className="hint">First slice {formatFriday(pickupDate, "short")}, then every school Friday after.</p>
                     ) : null}
                   </div>
                   <div className={`field ${errors.name ? "invalid" : ""}`}>

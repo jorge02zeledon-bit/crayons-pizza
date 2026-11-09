@@ -37,6 +37,7 @@ See `.env.example` for every variable.
 | `lib/menu.ts` | The two products, prices, billing interval, store details, Friday pickup window. Prices here are the only prices used; the server never trusts amounts from the browser. |
 | `lib/cart.ts` | Cart math and validation, shared by the browser and the API. |
 | `lib/fridays.ts` | Date helpers: which Fridays can be chosen, time-zone-safe "today", formatting. |
+| `lib/schoolCalendar.ts` | The school's 2026-27 closures and the Pizza Friday rule: no school on a Friday means slices go out the Thursday before; a full-week break means no pizza that week and the Friday cannot be chosen. Edit `CLOSURES` and `DAY_NOTES` when the school changes dates. |
 | `lib/payments/types.ts` | The `PaymentProvider` interface: `createCheckout`, `getOrder`, `handleWebhook`. |
 | `lib/payments/stripe.ts` | Stripe Checkout implementation. |
 | `lib/payments/chase.ts` | Placeholder for Chase Payment Solutions with notes on what to fill in. |

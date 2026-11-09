@@ -4,10 +4,14 @@ import { MenuSection } from "@/components/MenuSection";
 import { OrderButton } from "@/components/OrderButton";
 import { STORE, SLICE_PRICE_CENTS, SUBSCRIPTION_PRICE_CENTS } from "@/lib/menu";
 import { formatMoney } from "@/lib/cart";
+import { formatFriday } from "@/lib/fridays";
+import { SCHOOL_YEAR, fridayExceptions } from "@/lib/schoolCalendar";
 
 export default function HomePage() {
   const price = formatMoney(SLICE_PRICE_CENTS).replace(".00", "");
   const subPrice = formatMoney(SUBSCRIPTION_PRICE_CENTS).replace(".00", "");
+  const exceptions = fridayExceptions();
+  const firstFriday = "2026-08-14";
   return (
     <main>
       <section className="hero" aria-labelledby="hero-h">
@@ -49,7 +53,10 @@ export default function HomePage() {
             </li>
             <li>
               <strong>Pick the Friday on the calendar.</strong>
-              <span>For a subscription that is your first Friday. Up to {STORE.maxWeeksAhead} weeks ahead.</span>
+              <span>
+                For a subscription that is your first Friday. Up to {STORE.maxWeeksAhead} weeks ahead. No school on a Friday? We serve the
+                Thursday before. School break all week? No pizza day, and the calendar shows it.
+              </span>
             </li>
             <li>
               <strong>Pay online, then give the student&apos;s name at the counter.</strong>
@@ -59,6 +66,43 @@ export default function HomePage() {
               </span>
             </li>
           </ol>
+        </div>
+      </section>
+
+      <section className="calendar" id="calendar" aria-labelledby="cal-h">
+        <div className="wrap">
+          <h2 id="cal-h" className="h2">Pizza Fridays and the school calendar</h2>
+          <p className="cal-rule">
+            Every Friday from {formatFriday(firstFriday, "short")} to {formatFriday(SCHOOL_YEAR.lastDay, "short")} is a pizza Friday, except the
+            ones below. When there is no school on a Friday, slices are served the Thursday before. When the whole week is a break, there is
+            no pizza that week and you cannot pick that Friday. Dates follow the school&apos;s {SCHOOL_YEAR.label} calendar and move if the school moves them.
+          </p>
+          <table className="cal-table">
+            <thead>
+              <tr>
+                <th scope="col">Friday</th>
+                <th scope="col">At school</th>
+                <th scope="col">Pizza</th>
+              </tr>
+            </thead>
+            <tbody>
+              {exceptions.map(({ friday, status }) => (
+                <tr key={friday} className={status.kind === "skipped" ? "row-skip" : status.kind === "moved" ? "row-moved" : ""}>
+                  <td>{formatFriday(friday, "short")}, {friday.slice(0, 4)}</td>
+                  <td>{status.kind === "school" ? status.note : status.kind === "summer" ? "School is out" : status.reason}</td>
+                  <td>
+                    {status.kind === "moved" ? (
+                      <strong>Thursday, {formatFriday(status.serveOn, "short").replace(/^\w{3}, /, "")} instead</strong>
+                    ) : status.kind === "skipped" || status.kind === "summer" ? (
+                      <span className="muted">No pizza this week</span>
+                    ) : (
+                      "Pizza Friday as usual"
+                    )}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       </section>
 
