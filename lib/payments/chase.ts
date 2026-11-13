@@ -28,6 +28,9 @@ export function createChaseProvider(_config: { merchantId?: string; apiKey?: str
     async handleWebhook(_rawBody: string, _headers: Headers): Promise<WebhookResult> {
       throw notReady();
     },
+    async correctOrder(): Promise<void> {
+      throw notReady();
+    },
     async listPaidOrders(): Promise<PaidOrder[]> {
       throw notReady();
     },

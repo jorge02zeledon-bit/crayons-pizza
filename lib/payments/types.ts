@@ -74,4 +74,11 @@ export interface PaymentProvider {
   handleWebhook(rawBody: string, headers: Headers): Promise<WebhookResult>;
   /** Every paid order the provider knows about, newest first. Used by the orders page. */
   listPaidOrders(opts: { sinceDays: number }): Promise<PaidOrder[]>;
+  /**
+   * Staff correction of who an order is for (a misclicked grade, a typo in the
+   * room). Stored with the order at the provider so every later read sees it.
+   */
+  correctOrder(sessionId: string, fix: OrderCorrection): Promise<void>;
 }
+
+export type OrderCorrection = { student: string; grade: string; classroom: string };

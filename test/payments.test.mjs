@@ -43,3 +43,15 @@ test("mock provider rejects a token signed with another secret or tampered", asy
   assert.equal(await a.getOrder(`${payload}x.${sig}`), null);
   assert.equal(await a.getOrder("garbage"), null);
 });
+
+test("mock provider applies a staff correction on later reads", async () => {
+  const p = createMockProvider("secret-c");
+  const session = await p.createCheckout({ ...req, customer: { name: "Ana", student: "Leo", grade: "3 Year Old Room", classroom: "Mrs. Y", phone: "5551234567" } });
+  const token = new URL(session.url).searchParams.get("token");
+  await p.correctOrder(token, { student: "Leo Vargas", grade: "3rd", classroom: "Mrs. Yulliana" });
+  const fixed = await p.getOrder(token);
+  assert.equal(fixed.customer.grade, "3rd");
+  assert.equal(fixed.customer.student, "Leo Vargas");
+  assert.equal(fixed.customer.classroom, "Mrs. Yulliana");
+  await assert.rejects(() => p.correctOrder("garbage", { student: "x", grade: "K", classroom: "y" }));
+});

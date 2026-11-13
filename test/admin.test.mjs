@@ -17,6 +17,7 @@ const sub = (over) => paid({
 
 test("rows carry student, grade, classroom and plan", () => {
   const rows = toRows([paid(), sub()]);
+  assert.equal(rows[0].sessionId, "cs_test_abc123");
   assert.deepEqual(rows.map((r) => [r.student, r.grade, r.classroom, r.kind, r.slices, r.status, r.ref]),
     [["Leo", "2nd", "Rm 12", "one-off", 2, "paid", "ABC123"], ["Mia", "K", "Ms. Lee", "subscription", 2, "active", "SUB999"]]);
 });

@@ -1,5 +1,5 @@
 import { createHmac, randomBytes, timingSafeEqual } from "node:crypto";
-import type { CheckoutRequest, CheckoutSession, PaidOrder, PaymentProvider, WebhookResult } from "./types.ts";
+import type { CheckoutRequest, CheckoutSession, OrderCorrection, PaidOrder, PaymentProvider, WebhookResult } from "./types.ts";
 
 /**
  * A fake provider for local development and previews with no Stripe keys.
@@ -26,6 +26,10 @@ export function createMockProvider(signingSecret: string): PaymentProvider {
       return null;
     }
   };
+
+  /** Corrections live only as long as the process; the mock has no store. Kept on globalThis so every request sees them. */
+  const g = globalThis as unknown as { __mockCorrections?: Map<string, OrderCorrection> };
+  const corrections = (g.__mockCorrections ??= new Map<string, OrderCorrection>());
 
   return {
     name: "mock",
@@ -60,7 +64,16 @@ export function createMockProvider(signingSecret: string): PaymentProvider {
     },
 
     async getOrder(sessionId: string): Promise<PaidOrder | null> {
-      return decode(sessionId);
+      const order = decode(sessionId);
+      if (!order) return null;
+      const fix = corrections.get(order.sessionId);
+      return fix ? { ...order, customer: { ...order.customer, ...fix } } : order;
+    },
+
+    async correctOrder(sessionId: string, fix: OrderCorrection): Promise<void> {
+      const order = decode(sessionId);
+      if (!order) throw new Error("Unknown mock order");
+      corrections.set(order.sessionId, fix);
     },
 
     async handleWebhook(): Promise<WebhookResult> {

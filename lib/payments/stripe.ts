@@ -1,6 +1,6 @@
 import Stripe from "stripe";
 import { servingLabel } from "../menu.ts";
-import type { CheckoutRequest, CheckoutSession, PaidOrder, PaymentProvider, WebhookResult } from "./types.ts";
+import type { CheckoutRequest, CheckoutSession, OrderCorrection, PaidOrder, PaymentProvider, WebhookResult } from "./types.ts";
 
 /**
  * Stripe Checkout (hosted page). Needs:
@@ -91,6 +91,15 @@ export function createStripeProvider(
         if (out.length >= 2000) break;
       }
       return out;
+    },
+
+    async correctOrder(sessionId: string, fix: OrderCorrection): Promise<void> {
+      // Stripe merges metadata keys, so only these change. The subscription
+      // carries its own copy, used by invoices, so keep it in step.
+      const metadata = { student_name: fix.student, grade: fix.grade, classroom: fix.classroom, corrected_at: new Date().toISOString() };
+      const s = await stripe.checkout.sessions.update(sessionId, { metadata });
+      const subId = typeof s.subscription === "string" ? s.subscription : s.subscription?.id;
+      if (subId) await stripe.subscriptions.update(subId, { metadata });
     },
   };
 }

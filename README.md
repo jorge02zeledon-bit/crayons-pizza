@@ -68,7 +68,7 @@ npm run typecheck && npm run build
 
 ## Orders page (staff)
 
-`/admin/orders` lists every paid order and active subscription, filtered by Friday, grade and a search box, sorted by grade, room and student, with a CSV download. It reads straight from Stripe, so Stripe is the system of record and nothing can drift. Protect it by setting `ADMIN_PASSWORD` in Vercel; the page shows a sign-in form and keeps a signed 12-hour cookie. Grades offered at checkout are the `GRADES` list in `lib/menu.ts`.
+`/admin/orders` lists every paid order and active subscription, filtered by Friday, grade and a search box, sorted by grade, room and student, with a CSV download. It reads straight from Stripe, so Stripe is the system of record and nothing can drift. Protect it by setting `ADMIN_PASSWORD` in Vercel; the page shows a sign-in form and keeps a signed 12-hour cookie. Each row has a **Fix** link where staff can correct the student's name, grade or room; the correction is written to the order's metadata in Stripe (and to the subscription, when there is one), so every later read of the orders page, the CSV and the confirmation page reflects it. Grades offered at checkout are the `GRADES` list in `lib/menu.ts`.
 
 ## Changing the menu
 

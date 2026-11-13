@@ -284,6 +284,8 @@ button.cal-day.cal-moved.selected::after { background: var(--white); color: var(
 .orders tbody tr:nth-child(even) { background: #fafafa; }
 .muted { color: var(--grey-on-white); }
 .small { font-size: 13px; }
+.fix-link { font-weight: 600; text-decoration: underline; text-underline-offset: 3px; white-space: nowrap; }
+.notice { border: 2px solid var(--black); padding: 12px 14px; font-weight: 600; }
 .pill { display: inline-block; padding: 2px 10px; border-radius: 999px; font-size: 13px; font-weight: 600; background: #eee; }
 .pill-paid, .pill-active { background: #dff3e3; color: #16642d; }
 .pill-canceled, .pill-unpaid { background: #fde3e1; color: #9a1f14; }

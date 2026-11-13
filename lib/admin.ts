@@ -61,6 +61,8 @@ export type OrderRow = {
   placedAt: string;
   note: string;
   ref: string;
+  /** Provider id, used by the correction form. */
+  sessionId: string;
   dashboardUrl?: string;
 };
 
@@ -83,6 +85,7 @@ export function toRows(orders: PaidOrder[]): OrderRow[] {
       placedAt: o.createdAt ?? "",
       note: o.note ?? "",
       ref: o.sessionId.slice(-6).toUpperCase(),
+      sessionId: o.sessionId,
       dashboardUrl: o.dashboardUrl,
     };
   });

@@ -9,7 +9,7 @@ import { getPaymentProvider } from "@/lib/payments";
 export const metadata: Metadata = { title: "Orders", robots: { index: false, follow: false } };
 export const dynamic = "force-dynamic";
 
-type Params = { friday?: string; grade?: string; q?: string; days?: string; error?: string };
+type Params = { friday?: string; grade?: string; q?: string; days?: string; error?: string; saved?: string };
 
 export default async function OrdersPage({ searchParams }: { searchParams: Promise<Params> }) {
   const sp = await searchParams;
@@ -100,6 +100,7 @@ export default async function OrdersPage({ searchParams }: { searchParams: Promi
         </div>
       </form>
 
+      {sp.saved ? <p className="notice" role="status">Order {sp.saved} updated. Slice counts below follow the corrected grade.</p> : null}
       {loadError ? (
         <p className="err" role="alert">{loadError}</p>
       ) : (
@@ -126,6 +127,7 @@ export default async function OrdersPage({ searchParams }: { searchParams: Promi
                     <th>Phone</th>
                     <th>Status</th>
                     <th>Ref</th>
+                    <th></th>
                   </tr>
                 </thead>
                 <tbody>
@@ -144,6 +146,7 @@ export default async function OrdersPage({ searchParams }: { searchParams: Promi
                       <td><a href={`tel:${r.phone.replace(/\D/g, "")}`}>{r.phone}</a></td>
                       <td><span className={`pill pill-${r.status}`}>{r.status}</span></td>
                       <td>{r.dashboardUrl ? <a href={r.dashboardUrl} target="_blank" rel="noreferrer">{r.ref}</a> : r.ref}</td>
+                      <td><a className="fix-link" href={`/admin/correct?session=${encodeURIComponent(r.sessionId)}`}>Fix</a></td>
                     </tr>
                   ))}
                 </tbody>
