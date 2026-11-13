@@ -120,6 +120,7 @@ img { display: block; max-width: 100%; height: auto; }
 .dish-desc { margin-top: 12px; color: var(--grey-on-white); max-width: 50ch; }
 .dish-price { margin-top: 22px; font-weight: 900; font-variation-settings: "wdth" 118; font-size: 34px; line-height: 1; }
 .dish-price span { font-weight: 500; font-variation-settings: "wdth" 100; font-size: 16px; color: var(--grey-on-white); margin-left: 6px; }
+.dish-serving { margin-top: 10px; font-weight: 600; max-width: 40ch; }
 .dish-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 16px; margin-top: 22px; }
 .dish-incart { color: var(--grey-on-white); font-weight: 500; }
 

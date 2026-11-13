@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { MENU } from "@/lib/menu";
+import { MENU, SERVING_RULE } from "@/lib/menu";
 import { formatMoney } from "@/lib/cart";
 import { useCart } from "./CartProvider";
 import { Stepper } from "./Stepper";
@@ -31,20 +31,21 @@ export function MenuSection() {
               <p className="dish-price">
                 {formatMoney(item.priceCents)}{" "}
                 <span>
-                  {sub ? `${item.billing?.label}, per slice` : "a slice"}
+                  {sub ? `${item.billing?.label}, per student` : "per student"}
                   {item.note ? `, ${item.note.toLowerCase()}` : ""}
                 </span>
               </p>
+              <p className="dish-serving">{SERVING_RULE}</p>
               <div className="dish-actions">
                 {qty === 0 ? (
                   <button type="button" className="btn btn-primary" onClick={() => add(item.id, 1)}>
-                    {sub ? "Subscribe" : "Add a slice"}
+                    {sub ? "Subscribe" : "Add to order"}
                   </button>
                 ) : (
                   <>
                     <Stepper id={item.id} label={item.name} size="lg" />
                     <span className="dish-incart">
-                      {qty} {sub ? `slice${qty === 1 ? "" : "s"} every Friday` : "in cart"}, {formatMoney(qty * item.priceCents)}
+                      {qty} {sub ? `student${qty === 1 ? "" : "s"} every Friday` : "in cart"}, {formatMoney(qty * item.priceCents)}
                       {sub ? ` ${item.billing?.label}` : ""}
                     </span>
                   </>

@@ -22,7 +22,8 @@ export default function HomePage() {
             <span>Fridays.</span>
           </h1>
           <p className="hero-sub">
-            A cheese slice, {price} a Friday, or {subPrice} a month for every Friday. Pick your Friday on the calendar and we hand deliver
+            Cheese pizza for {price} a Friday, or {subPrice} a month for every Friday: one slice for preschool and VPK, two slices for K
+            through 6th. Pick your Friday on the calendar and we hand deliver
             the slice to your student&apos;s classroom. Nothing to pick up.
           </p>
           <div className="hero-cta">
@@ -49,7 +50,10 @@ export default function HomePage() {
           <ol className="steps">
             <li>
               <strong>Choose one Friday or every Friday.</strong>
-              <span>One-time slices are {price} each. The subscription is {subPrice} every four Fridays and you can cancel any time.</span>
+              <span>
+                {price} a Friday is one slice for preschool and VPK, two slices for K through 6th. The subscription is {subPrice} every four
+                Fridays and you can cancel any time.
+              </span>
             </li>
             <li>
               <strong>Pick the Friday on the calendar.</strong>

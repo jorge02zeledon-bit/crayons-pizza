@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { formatMoney } from "@/lib/cart";
 import { formatFriday, type ISODate } from "@/lib/fridays";
 import { fridayStatus } from "@/lib/schoolCalendar";
-import { GRADES } from "@/lib/menu";
+import { GRADES, isElementary } from "@/lib/menu";
 import { useCart } from "./CartProvider";
 import { FridayPicker } from "./FridayPicker";
 import { Stepper } from "./Stepper";
@@ -149,7 +149,7 @@ export function CartDrawer() {
               <div className="totals">
                 {oneOff ? (
                   <div>
-                    <span>One-time slices</span>
+                    <span>One-time servings</span>
                     <span>{formatMoney(totals.oneOffCents)}</span>
                   </div>
                 ) : null}
@@ -211,7 +211,7 @@ export function CartDrawer() {
                   <div className={`field ${errors.student ? "invalid" : ""}`}>
                     <label htmlFor="f-student">Student&apos;s name</label>
                     <input type="text" autoComplete="off" maxLength={80} required {...field("student")} />
-                    {errors.student ? <p className="err" id="err-student">{errors.student}</p> : <p className="hint">The slice is set aside under this name.</p>}
+                    {errors.student ? <p className="err" id="err-student">{errors.student}</p> : <p className="hint">The pizza is delivered under this name.</p>}
                   </div>
                   <div className="two-up">
                     <div className={`field ${errors.grade ? "invalid" : ""}`}>
@@ -224,7 +224,13 @@ export function CartDrawer() {
                           </option>
                         ))}
                       </select>
-                      {errors.grade ? <p className="err" id="err-grade">{errors.grade}</p> : null}
+                      {errors.grade ? (
+                        <p className="err" id="err-grade">{errors.grade}</p>
+                      ) : form.grade ? (
+                        <p className="hint hint-strong">{isElementary(form.grade) ? "K to 6th: two slices per serving." : "One slice per serving."}</p>
+                      ) : (
+                        <p className="hint">K to 6th get two slices, younger rooms one.</p>
+                      )}
                     </div>
                     <div className={`field ${errors.classroom ? "invalid" : ""}`}>
                       <label htmlFor="f-classroom">Teacher or room</label>

@@ -1,3 +1,4 @@
+import { slicesPerServing } from "./menu.ts";
 import { createHmac, timingSafeEqual } from "node:crypto";
 import type { PaidOrder } from "./payments/types.ts";
 
@@ -76,7 +77,7 @@ export function toRows(orders: PaidOrder[]): OrderRow[] {
       phone: o.customer.phone ?? "",
       email: o.customer.email ?? "",
       kind,
-      slices: subLine ? subLine.qty + oneOffSlices : oneOffSlices,
+      slices: (subLine ? subLine.qty + oneOffSlices : oneOffSlices) * slicesPerServing(o.customer.grade),
       friday: o.pickupDate ?? "",
       status: o.subscription ? o.subscription.status : o.status,
       placedAt: o.createdAt ?? "",

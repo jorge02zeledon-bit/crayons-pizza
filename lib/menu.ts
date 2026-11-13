@@ -29,7 +29,7 @@ export const MENU: readonly Product[] = [
     id: "cheese",
     kind: "one-off",
     name: "One Friday",
-    tagline: "A cheese slice, one Friday, six dollars.",
+    tagline: "Cheese pizza, one Friday, six dollars.",
     description:
       "Wider than a normal slice, with a soft crust and cheese that covers it edge to edge. Thick, doughy crust, tomato sauce, and a heavy layer of mozzarella. No other toppings.",
     priceCents: SLICE_PRICE_CENTS,
@@ -41,9 +41,9 @@ export const MENU: readonly Product[] = [
     id: "friday-club",
     kind: "subscription",
     name: "Every Friday",
-    tagline: "The same slice, every Friday, for $24 a month.",
+    tagline: "The same deal, every Friday, for $24 a month.",
     description:
-      "One cheese slice waiting for you every Friday. Billed every four Fridays, which works out to the same $6 a slice. Pick your first Friday. Cancel any time.",
+      "Cheese pizza waiting for your student every Friday. Billed every four Fridays, which works out to the same $6 a Friday. Pick your first Friday. Cancel any time.",
     priceCents: SUBSCRIPTION_PRICE_CENTS,
     billing: { interval: "week", intervalCount: 4, label: "every 4 weeks" },
     note: "Cancel any time",
@@ -57,6 +57,25 @@ export const MAX_QTY_PER_ITEM = 50;
 /** Grades offered at checkout. Edit to match the school. */
 export const GRADES = ["1 Year Old Room", "2 Year Old Room", "3 Year Old Room", "VPK Room", "K", "1st", "2nd", "3rd", "4th", "5th", "6th"] as const;
 export type Grade = (typeof GRADES)[number];
+
+/** Grades that get two slices per serving. Everyone else (the toddler rooms and VPK) gets one. */
+export const ELEMENTARY_GRADES: readonly string[] = ["K", "1st", "2nd", "3rd", "4th", "5th", "6th"];
+
+export function isElementary(grade: string | undefined): boolean {
+  return !!grade && ELEMENTARY_GRADES.includes(grade);
+}
+
+/** How many slices one $6 serving is for a given grade. */
+export function slicesPerServing(grade: string | undefined): number {
+  return isElementary(grade) ? 2 : 1;
+}
+
+/** "one slice" / "two slices", for copy. */
+export function servingLabel(grade: string | undefined): string {
+  return isElementary(grade) ? "two slices" : "one slice";
+}
+
+export const SERVING_RULE = "Preschool and VPK get one slice. K through 6th get two slices. Same price.";
 
 export function findProduct(id: string): Product | undefined {
   return MENU.find((m) => m.id === id);

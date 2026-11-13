@@ -18,7 +18,7 @@ const sub = (over) => paid({
 test("rows carry student, grade, classroom and plan", () => {
   const rows = toRows([paid(), sub()]);
   assert.deepEqual(rows.map((r) => [r.student, r.grade, r.classroom, r.kind, r.slices, r.status, r.ref]),
-    [["Leo", "2nd", "Rm 12", "one-off", 1, "paid", "ABC123"], ["Mia", "K", "Ms. Lee", "subscription", 1, "active", "SUB999"]]);
+    [["Leo", "2nd", "Rm 12", "one-off", 2, "paid", "ABC123"], ["Mia", "K", "Ms. Lee", "subscription", 2, "active", "SUB999"]]);
 });
 
 test("friday filter: one-offs on that day, subscriptions started on or before it and still active", () => {
@@ -33,7 +33,7 @@ test("friday filter: one-offs on that day, subscriptions started on or before it
 test("sorting follows grade order then classroom then student; counts by grade", () => {
   const rows = sortRows(toRows([paid(), sub()]), ["Pre-K", "K", "1st", "2nd"]);
   assert.deepEqual(rows.map((r) => r.student), ["Mia", "Leo"]);
-  assert.deepEqual(countByGrade(rows), [{ grade: "K", students: 1, slices: 1 }, { grade: "2nd", students: 1, slices: 1 }]);
+  assert.deepEqual(countByGrade(rows), [{ grade: "K", students: 1, slices: 2 }, { grade: "2nd", students: 1, slices: 2 }]);
 });
 
 test("csv escapes commas and quotes", () => {

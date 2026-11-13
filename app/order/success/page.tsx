@@ -4,7 +4,7 @@ import { ClearCart } from "@/components/ClearCart";
 import { formatMoney } from "@/lib/cart";
 import { formatFriday, isISODate } from "@/lib/fridays";
 import { fridayStatus } from "@/lib/schoolCalendar";
-import { STORE } from "@/lib/menu";
+import { STORE, servingLabel } from "@/lib/menu";
 import { getPaymentProvider } from "@/lib/payments";
 
 export const metadata: Metadata = { title: "Order placed" };
@@ -35,14 +35,14 @@ export default async function SuccessPage({ searchParams }: { searchParams: Prom
       <ClearCart />
       <p className="kicker">{paid ? (sub ? "Subscribed" : "Paid") : "Payment pending"}</p>
       <h1 className="h2">
-        {!paid ? "We are waiting on the payment." : sub ? "Your Fridays are set." : "Your slice is on the books."}
+        {!paid ? "We are waiting on the payment." : sub ? "Your Fridays are set." : "Your pizza is on the books."}
       </h1>
       <p>
         {order.customer.name ? `Thanks, ${order.customer.name}. ` : ""}
-        {order.customer.student ? `The slice is set aside for ${order.customer.student}${order.customer.grade ? `, ${order.customer.grade} grade` : ""}${order.customer.classroom ? `, ${order.customer.classroom}` : ""}. ` : ""}
+        {order.customer.student ? `${servingLabel(order.customer.grade) === "two slices" ? "Two slices are" : "One slice is"} set aside for ${order.customer.student}${order.customer.grade ? `, ${order.customer.grade} grade` : ""}${order.customer.classroom ? `, ${order.customer.classroom}` : ""}. ` : ""}
         {when
           ? sub
-            ? `First slice ${movedTo ? `${movedTo} (no school that Friday)` : when}, then every school Friday after. `
+            ? `First delivery ${movedTo ? `${movedTo} (no school that Friday)` : when}, then every school Friday after. `
             : movedTo
               ? `No school ${when}, so it is delivered ${movedTo}. `
               : `Delivered ${when}. `

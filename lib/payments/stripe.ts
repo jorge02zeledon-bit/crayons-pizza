@@ -1,4 +1,5 @@
 import Stripe from "stripe";
+import { servingLabel } from "../menu.ts";
 import type { CheckoutRequest, CheckoutSession, PaidOrder, PaymentProvider, WebhookResult } from "./types.ts";
 
 /**
@@ -39,7 +40,7 @@ export function createStripeProvider(
           price_data: {
             currency: req.currency,
             unit_amount: l.unitCents,
-            product_data: { name: l.kind === "subscription" ? `${l.name}: cheese slice every Friday` : `${l.name}: cheese slice` },
+            product_data: { name: l.kind === "subscription" ? `${l.name}: ${servingLabel(req.customer.grade)} of cheese pizza every Friday` : `${l.name}: ${servingLabel(req.customer.grade)} of cheese pizza` },
             ...(l.billing ? { recurring: { interval: l.billing.interval, interval_count: l.billing.intervalCount } } : {}),
           },
         })),
